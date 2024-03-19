@@ -2,7 +2,7 @@
 # :::artifacts:::
 #
 
-desck 'commit changes and push them to the remote repository'
+desc 'commit changes and push them to the remote repository'
 task :save => [:commit, :push]
 
 desc 'commit changes to VCS'
