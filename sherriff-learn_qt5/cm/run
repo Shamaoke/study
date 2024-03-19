@@ -1,0 +1,9 @@
+#! /usr/bin/env zsh
+
+function main {
+  LD_LIBRARY_PATH=/home/user/.development/books/sherriff-learn_qt5/cm/cm-lib/_build ./cm-ui/_build/cm-ui
+}
+
+main $@
+
+# vim: set textwidth=80 colorcolumn=80:

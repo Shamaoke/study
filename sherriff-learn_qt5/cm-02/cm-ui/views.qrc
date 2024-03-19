@@ -1,0 +1,7 @@
+
+<RCC>
+  <qresource prefix="/">
+    <file>views/MasterView.qml</file>
+  </qresource>
+</RCC>
+
