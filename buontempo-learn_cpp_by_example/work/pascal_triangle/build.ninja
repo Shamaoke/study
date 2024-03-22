@@ -1,0 +1,10 @@
+
+cxxflags = --std=c++2b -fdiagnostics-color=always
+cxxwarnings = -Wunused-parameter
+
+rule cxx
+  command = clang++ $cxxflags $cxxwarnings -o ../_build/$out $in
+  description = Compiling $in ...
+
+build triangle: cxx triangle.cpp
+
