@@ -1,0 +1,9 @@
+
+cxxflags = --std=c++2b -Wunused-parameter
+
+rule cxx
+  command = clang++ $cxxflags -o ../_build/$out $in
+  description = Compiling $in ...
+
+build decltype: cxx decltype.cpp
+
