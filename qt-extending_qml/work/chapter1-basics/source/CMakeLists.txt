@@ -4,6 +4,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(chapter1-basics LANGUAGES CXX)
 
+# set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+set(CMAKE_COLOR_DIAGNOSTICS ON)
+
 set(CMAKE_AUTOMOC ON)
 
 if(NOT DEFINED INSTALL_EXAMPLESDIR)
