@@ -1,0 +1,6 @@
+
+**/build/
+**/supplementary/
+
+.ninja_log
+
