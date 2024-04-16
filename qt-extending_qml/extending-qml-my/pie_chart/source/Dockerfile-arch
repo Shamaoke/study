@@ -41,6 +41,8 @@ FROM archlinux:base as release
 
   WORKDIR /home/pie_chart
 
+  COPY ./fonts/Oswald/Oswald-Regular.ttf ./fonts/Oswald/
+
   COPY --from=build /build/bin/pie_chart ./pie_chart
 
   RUN touch pie_chart.log
