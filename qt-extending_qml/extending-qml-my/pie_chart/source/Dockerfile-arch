@@ -1,0 +1,50 @@
+
+##
+## ::: DarkCam | Рецепт сборки образа :::
+##
+
+FROM archlinux:base as install
+
+  RUN pacman -Syu --noconfirm
+
+  RUN pacman -S --noconfirm gcc
+  # RUN pacman -S --noconfirm clang
+  RUN pacman -S --noconfirm ninja
+  RUN pacman -S --noconfirm cmake
+  RUN pacman -S --noconfirm qt6-base
+  RUN pacman -S --noconfirm qt6-declarative
+
+FROM install as build
+
+  WORKDIR /build/source
+
+  COPY . .
+
+  WORKDIR /build
+
+  RUN mkdir build
+  RUN mkdir bin
+
+  RUN cmake -G Ninja -S source -B build
+
+  RUN cmake --build build
+
+FROM archlinux:base as release
+
+  RUN pacman -Syu --noconfirm
+  RUN pacman -S --noconfirm qt6-base
+  RUN pacman -S --noconfirm qt6-declarative
+
+  RUN useradd --create-home --shell /bin/bash pie_chart
+
+  USER pie_chart
+
+  WORKDIR /home/pie_chart
+
+  COPY --from=build /build/bin/pie_chart ./pie_chart
+
+  RUN touch pie_chart.log
+
+  ENTRYPOINT ["/bin/bash", "-c", "$HOME/pie_chart 1>$HOME/pie_chart.log 2>$HOME/pie_chart.log"]
+
+# vim: set filetype=dockerifle:

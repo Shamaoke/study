@@ -1,0 +1,56 @@
+
+##
+## ::: DarkCam | Рецепт сборки образа :::
+##
+
+FROM alpine:3.19.1 as install
+
+  RUN apk --update-cache upgrade
+
+  RUN apk add linux-headers
+  RUN apk add g++
+  # RUN apk add clang
+  RUN apk add ninja-build
+  RUN apk add cmake
+  RUN apk add qt6-qtbase-dev
+  RUN apk add qt6-qtdeclarative-dev
+
+FROM install as build
+
+  ENV PATH="${PATH}:/usr/lib/ninja-build/bin"
+
+  WORKDIR /build/source
+  COPY . .
+
+  WORKDIR /build
+
+  RUN mkdir build
+  RUN mkdir bin
+
+  RUN cmake -G Ninja -S source -B build
+
+  RUN cmake --build build
+
+FROM alpine:3.19.1 as release
+
+  ENV XDG_RUNTIME_DIR="/tmp/runtime-root"
+
+  RUN apk --update-cache upgrade
+
+  RUN apk add qt6-qtbase
+  RUN apk add qt6-qtdeclarative
+  RUN apk add mesa-dri-gallium
+
+  RUN adduser -D -u 1000 -g 1000 pie_chart
+
+  USER pie_chart
+
+  WORKDIR /home/pie_chart
+
+  COPY --from=build /build/bin/pie_chart ./pie_chart
+
+  RUN touch pie_chart.log
+
+  ENTRYPOINT ["/bin/sh", "-c", "$HOME/pie_chart 1>$HOME/pie_chart.log 2>$HOME/pie_chart.log"]
+
+# vim: set filetype=dockerfile:

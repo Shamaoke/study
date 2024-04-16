@@ -1,0 +1,31 @@
+#! /usr/bin/env zsh
+
+function main {
+  local project=$1
+  local xauth=/tmp/.docker.xauth
+  local xsock=/tmp/.X11-unix
+  local -A log=(
+    [source]="${HOME}/.development/study/qt-extending_qml/extending-qml-my/${project}/log/${project}.log"
+    [destination]="/home/${project}/${project}.log"
+  )
+
+  touch $xauth
+
+  xauth nlist $DISPLAY \
+    | sed --expression='s/^..../ffff/' \
+    | xauth -f $xauth nmerge -
+
+  docker run \
+    --rm \
+    --privileged \
+    --env XAUTHORITY=$xauth \
+    --env DISPLAY=$DISPLAY \
+    --volume ${xsock}:${xsock} \
+    --volume ${xauth}:${xauth} \
+    --mount "type=bind,source=${log[source]},destination=${log[destination]}" \
+    --network host \
+      ${project} &!
+}
+
+main $@
+

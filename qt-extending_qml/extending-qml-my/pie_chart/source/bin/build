@@ -1,0 +1,14 @@
+#! /usr/bin/env zsh
+
+function main {
+  local base=$1
+
+  docker image build \
+    --progress tty \
+    --tag pie_chart:latest \
+    --file source/Dockerfile-${base} \
+      source
+}
+
+main $@
+
